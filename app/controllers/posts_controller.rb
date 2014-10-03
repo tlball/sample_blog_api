@@ -2,7 +2,13 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    if user_id = params[:user_id]
+      @user = User.find(user_id)
+      @posts = @user.posts.all
+    else
+      @posts = Post.all
+    end
+
 
     render json: @posts
   end
@@ -10,7 +16,8 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @post = Post.find(params[:id])
+    @user = User.find(params[:user_id])
+    @post = @user.posts.find(params[:id])
 
     render json: @post
   end
@@ -18,10 +25,11 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(params[:post])
+    @user = User.find(params[:user_id])
+    @post = @user.posts.new(post_params)
 
     if @post.save
-      render json: @post, status: :created, location: @post
+      render json: @post, status: :created, location: user_post_path(@user, @post)
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -30,9 +38,10 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    @post = Post.find(params[:id])
+    @user = User.find(params[:user_id])
+    @post = @user.posts.find(params[:id])
 
-    if @post.update(params[:post])
+    if @post.update(post_params)
       head :no_content
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -42,9 +51,16 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
-    @post = Post.find(params[:id])
+    @user = User.find(params[:user_id])
+    @post = @user.posts.find(params[:id])
     @post.destroy
 
     head :no_content
+  end
+
+  private
+
+  def post_params
+    params.require(:post).permit(:title, :content, :creator_id)
   end
 end

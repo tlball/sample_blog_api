@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-HltBlogger::Application.config.secret_token = '7257210ed743e54184accf0a52e6e2c9b329edaf6db02f38cade983c34048a928f51f86df0c87678d946d458af7ebdab63d06c687092ae2d25b61d3b3a70bf2d'
+HltBlogger::Application.config.secret_token = '41aae5f3edeb445ac8ecd04adf671e2650b569cb4e3342bcdee89cafdfcc94f4d45a119d544b82bc9207f79a7b394a6bf5c3bdb8da669380881d6385419da6cd'

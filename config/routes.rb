@@ -1,8 +1,11 @@
 HltBlogger::Application.routes.draw do
   resources :post_categories, except: [:new, :edit]
-  resources :categories, except: [:new, :edit]
-  resources :users, except: [:new, :edit]
   resources :posts, except: [:new, :edit]
+  resources :categories, except: [:new, :edit]
+  resources :users, except: [:new, :edit] do
+    resources :posts, except: [:new, :edit]
+  end
+  resources :posts, only: [:index]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
