@@ -1,6 +1,4 @@
 HltBlogger::Application.routes.draw do
-  resources :post_categories, except: [:new, :edit]
-  resources :posts, except: [:new, :edit]
   resources :categories, except: [:new, :edit]
   resources :users, except: [:new, :edit] do
     resources :posts, except: [:new, :edit]
@@ -10,7 +8,7 @@ HltBlogger::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'posts#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

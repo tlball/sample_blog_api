@@ -25,8 +25,8 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @user = User.find(params[:user_id])
-    @post = @user.posts.new(post_params)
+      @user = User.find(params[:user_id])
+      @post = @user.posts.new(post_params)
 
     if @post.save
       render json: @post, status: :created, location: [@user, @post]
@@ -61,6 +61,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, :creator_id)
+    params.require(:post).permit(:title, :content, :creator_id, post_categories_attributes: [:category_id])
   end
 end

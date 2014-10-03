@@ -148,6 +148,16 @@ describe PostsController do
         assigns(:post).should eq(post)
       end
 
+      it "adds categories for the post" do
+        post = Post.create! valid_attributes
+        count = post.categories.count
+        category1 = create(:category, name: 'category 1')
+        category2 = create(:category, name: 'category 2')
+        put :update, {id: post.to_param, post: {post_categories_attributes: [{category_id: category1.id}, {category_id:category2.id}]}, user_id: user.id}
+
+        expect(post.categories.count).to eq(count+2)
+      end
+
     end
 
     describe "with invalid params" do
