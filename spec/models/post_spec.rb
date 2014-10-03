@@ -19,16 +19,17 @@ describe Post do
   it 'should be able to add a category' do
     post = create(:post)
     expect(post.categories).to be_empty
-    post.categories << Category.where(name: 'family')
+    post.categories << Category.create(name: 'family')
     post.save
+    post.reload
     expect(post.categories.size).to eq(1)
   end
 
   it 'should be able to have multiple categories' do
     post = create(:post)
     expect(post.categories).to be_empty
-    post.categories << Category.where(name: 'family')
-    post.categories << Category.where(name: 'home')
+    post.categories << Category.create(name: 'family')
+    post.categories << Category.create(name: 'home')
     post.save
     expect(post.categories.size).to eq(2)
   end

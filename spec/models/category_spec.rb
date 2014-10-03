@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Category do
   it 'should be able to add a post' do
-    category = Category.where(name: 'work').first
+    category = Category.create(name: 'work')
     expect(category.posts).to be_empty
     category.posts << create(:post)
     expect(category.save).to be_true
@@ -10,7 +10,7 @@ describe Category do
   end
 
   it 'should be able to have multiple posts' do
-    category = Category.where(name: 'hobbies').first
+    category = Category.create(name: 'hobbies')
     expect(category.posts).to be_empty
     3.times do
       category.posts << create(:post)

@@ -18,7 +18,7 @@ class CategoriesController < ApplicationController
   # POST /categories
   # POST /categories.json
   def create
-    @category = Category.new(params[:category])
+    @category = Category.new(category_params)
 
     if @category.save
       render json: @category, status: :created, location: @category
@@ -32,7 +32,7 @@ class CategoriesController < ApplicationController
   def update
     @category = Category.find(params[:id])
 
-    if @category.update(params[:category])
+    if @category.update(category_params)
       head :no_content
     else
       render json: @category.errors, status: :unprocessable_entity
@@ -46,5 +46,11 @@ class CategoriesController < ApplicationController
     @category.destroy
 
     head :no_content
+  end
+
+  private
+
+  def category_params
+    params.require(:category).permit(:name)
   end
 end

@@ -24,14 +24,41 @@ describe PostsController do
   # Post. As you add validations to Post, be sure to
   # adjust the attributes here as well.
   let(:user) {create(:user)}
+  let(:user2) {create(:user, first_name:'Barney', last_name:'Rubble')}
   let(:valid_attributes) { { "content" => "My Text",  "title" => "My Post", "creator_id" => user.id} }
 
 
   describe "GET index" do
-    it "assigns all posts as @posts" do
+    it "assigns all posts as @posts for user" do
       post = Post.create! valid_attributes
+      post2 = Post.create! valid_attributes.merge({creator_id: user2.id})
       get :index, {user_id: user.id}
       assigns(:posts).should eq([post])
+      assigns(:posts).should_not include(post2)
+    end
+
+    it "assigns all posts as @posts with no user" do
+      post1 = Post.create! valid_attributes
+      post2 = Post.create! valid_attributes.merge({creator_id: user2.id})
+      get :index, {}
+      assigns(:posts).should eq([post1, post2])
+    end
+
+    it "returns all posts as a JSON object" do
+      post1 = Post.create! valid_attributes
+      post2 = Post.create! valid_attributes.merge({creator_id: user2.id})
+      get :index, {}
+
+      posts = JSON.parse(response.body)
+      expect(posts.size).to eq(2)
+      expect(posts[0]['id']).to eq(post1.id)
+      expect(posts[1]['id']).to eq(post2.id)
+      expect(posts[0]['title']).to eq(post1.title)
+      expect(posts[1]['title']).to eq(post2.title)
+      expect(posts[0]['content']).to eq(post1.content)
+      expect(posts[1]['content']).to eq(post2.content)
+      expect(posts[0]['creator_id']).to eq(user.id)
+      expect(posts[1]['creator_id']).to eq(user2.id)
     end
   end
 
@@ -40,6 +67,23 @@ describe PostsController do
       post = Post.create! valid_attributes
       get :show, {id: post.to_param, user_id: user.id}
       assigns(:post).should eq(post)
+    end
+
+    it "assigns the requested user as @user" do
+      post = Post.create! valid_attributes
+      get :show, {id: post.to_param, user_id: user.id}
+      assigns(:user).should eq(user)
+    end
+
+    it "should return the post as JSON" do
+      post = Post.create! valid_attributes
+      get :show, {id: post.to_param, user_id: user.id}
+
+      obj = JSON.parse(response.body)
+      expect(obj['id']).to eq(user.posts.last.id)
+      expect(obj['title']).to eq(user.posts.last.title)
+      expect(obj['content']).to eq(user.posts.last.content)
+      expect(obj['creator_id']).to eq(user.id)
     end
   end
 
@@ -58,9 +102,13 @@ describe PostsController do
         assigns(:post).should be_persisted
       end
 
-      it "redirects to the created post" do
+      it "renders to the created post as JSON" do
         post :create, {post: valid_attributes, user_id: user.id}
-        response.should redirect_to(Post.last)
+        obj = JSON.parse(response.body)
+        expect(obj['id']).to eq(user.posts.last.id)
+        expect(obj['title']).to eq(user.posts.last.title)
+        expect(obj['content']).to eq(user.posts.last.content)
+        expect(obj['creator_id']).to eq(user.id)
       end
     end
 
@@ -71,6 +119,14 @@ describe PostsController do
         post :create, {post: { "content" => "invalid value" }, user_id: user.id}
         assigns(:post).should be_a_new(Post)
       end
+
+      it 'returns unprocessable_entity code' do
+        # Trigger the behavior that occurs when invalid params are submitted
+        Post.any_instance.stub(:save).and_return(false)
+        post :create, {post: { "content" => "invalid value" }, user_id: user.id}
+        expect(response.status).to eq(422)
+      end
+
     end
   end
 
@@ -91,6 +147,7 @@ describe PostsController do
         put :update, {id: post.to_param, post: valid_attributes, user_id: user.id}
         assigns(:post).should eq(post)
       end
+
     end
 
     describe "with invalid params" do
@@ -102,12 +159,12 @@ describe PostsController do
         assigns(:post).should eq(post)
       end
 
-      it "re-renders the 'edit' template" do
+      it "returns unprocessable_entity code" do
         post = Post.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Post.any_instance.stub(:save).and_return(false)
         put :update, {id: post.to_param, post: { "content" => "invalid value" }, user_id: user.id}
-        response.should render_template("edit")
+        expect(response.status).to eq(422)
       end
     end
   end
@@ -120,10 +177,10 @@ describe PostsController do
       }.to change(Post, :count).by(-1)
     end
 
-    it "redirects to the posts list" do
+    it "returns no content" do
       post = Post.create! valid_attributes
       delete :destroy, {id: post.to_param, user_id: user.id}
-      response.should redirect_to(user_posts_url(user))
+      expect(response.status).to eq(204)
     end
   end
 

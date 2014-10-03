@@ -13,4 +13,8 @@ FactoryGirl.define do
     last_name  'Flintstone'
     email { "#{first_name}.#{last_name}@bedrock.com".downcase }
   end
+
+  factory :category do
+    name 'Food'
+  end
 end
