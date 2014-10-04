@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  ##
+  # Lists all users
+  #
   # GET /users
   # GET /users.json
   def index
@@ -7,6 +10,9 @@ class UsersController < ApplicationController
     render json: @users
   end
 
+  ##
+  # Shows a user
+  #
   # GET /users/1
   # GET /users/1.json
   def show
@@ -15,6 +21,9 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  ##
+  # Creates a user
+  #
   # POST /users
   # POST /users.json
   def create
@@ -27,6 +36,9 @@ class UsersController < ApplicationController
     end
   end
 
+  ##
+  # Updates a user
+  #
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
@@ -39,6 +51,9 @@ class UsersController < ApplicationController
     end
   end
 
+  ##
+  # Deletes a user
+  #
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy

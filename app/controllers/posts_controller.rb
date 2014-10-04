@@ -1,6 +1,10 @@
 class PostsController < ApplicationController
+  ##
+  # Access all posts or all posts by user
   # GET /posts
   # GET /posts.json
+  # GET /users/:user_id/posts
+  # GET /users/:user_id/posts.json
   def index
     if user_id = params[:user_id]
       @user = User.find(user_id)
@@ -9,12 +13,14 @@ class PostsController < ApplicationController
       @posts = Post.all
     end
 
-
     render json: @posts
   end
 
-  # GET /posts/1
-  # GET /posts/1.json
+  ##
+  # Display a post for a user
+  #
+  # GET /users/:user_id/posts/1
+  # GET /users/:user_id/posts/1.json
   def show
     @user = User.find(params[:user_id])
     @post = @user.posts.find(params[:id])
@@ -22,8 +28,11 @@ class PostsController < ApplicationController
     render json: @post
   end
 
-  # POST /posts
-  # POST /posts.json
+  ##
+  # Create a post for a user
+  #
+  # POST /users/:user_id/posts
+  # POST /users/:user_id/posts.json
   def create
       @user = User.find(params[:user_id])
       @post = @user.posts.new(post_params)
@@ -35,8 +44,11 @@ class PostsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /posts/1
-  # PATCH/PUT /posts/1.json
+  ##
+  # Update a post for a user
+  #
+  # PATCH/PUT /users/:user_id/posts/1
+  # PATCH/PUT /users/:user_id/posts/1.json
   def update
     @user = User.find(params[:user_id])
     @post = @user.posts.find(params[:id])
@@ -48,8 +60,11 @@ class PostsController < ApplicationController
     end
   end
 
-  # DELETE /posts/1
-  # DELETE /posts/1.json
+  ##
+  # Delete a post for a user
+  #
+  # DELETE /users/:user_id/posts/1
+  # DELETE /users/:user_id/posts/1.json
   def destroy
     @user = User.find(params[:user_id])
     @post = @user.posts.find(params[:id])

@@ -1,4 +1,8 @@
 class CategoriesController < ApplicationController
+
+  ##
+  # Lists all categories
+  #
   # GET /categories
   # GET /categories.json
   def index
@@ -7,6 +11,9 @@ class CategoriesController < ApplicationController
     render json: @categories
   end
 
+  ##
+  # Displays a category
+  #
   # GET /categories/1
   # GET /categories/1.json
   def show
@@ -15,6 +22,9 @@ class CategoriesController < ApplicationController
     render json: @category
   end
 
+  ##
+  # Creates a category
+  #
   # POST /categories
   # POST /categories.json
   def create
@@ -27,6 +37,9 @@ class CategoriesController < ApplicationController
     end
   end
 
+  ##
+  # Updates a category
+  #
   # PATCH/PUT /categories/1
   # PATCH/PUT /categories/1.json
   def update
@@ -39,6 +52,9 @@ class CategoriesController < ApplicationController
     end
   end
 
+  ##
+  # Deletes a category
+  #
   # DELETE /categories/1
   # DELETE /categories/1.json
   def destroy

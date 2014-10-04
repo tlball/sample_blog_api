@@ -1,28 +1,18 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a simple, sample blog API application. It uses a Restful API to access users, posts, and categories.
 
-Things you may want to cover:
+Documentation on how to access these calls can be found in the doc directory.
 
-* Ruby version
+It runs on Ruby 2.0 and Rails 4 with the rails-api gem to make it more lightweight for the API. It uses a sqlite backend.
 
-* System dependencies
+To build the database run
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    rake db:setup
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Functionality can be seen by running the test suite
+
+
+    RAILS_ENV=test rake db:setup
+    rspec

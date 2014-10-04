@@ -17,4 +17,6 @@ gem 'sqlite3'
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'rdoc'
+  gem 'sdoc', require: false
 end
